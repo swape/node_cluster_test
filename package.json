@@ -1,0 +1,20 @@
+{
+  "name": "node_cluster_test",
+  "version": "1.0.0",
+  "description": "Testing a node cluster",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/swape/node_cluster_test.git"
+  },
+  "author": "Alireza Balouch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/swape/node_cluster_test/issues"
+  },
+  "homepage": "https://github.com/swape/node_cluster_test#readme"
+}
