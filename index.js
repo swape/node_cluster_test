@@ -1,60 +1,58 @@
-var cluster = require('cluster');
-var http = require('http');
-var numCPUs = require('os').cpus().length;
+const cluster = require('cluster');
+const http = require('http');
+const numCPUs = require('os').cpus().length;
 
 // enable or disable the clustering
-var blnEnable = true;
+const blnEnable = true;
 // enable or disable the loging
-var blnLog = true;
+const blnLog = true;
 
 /*
-
-Clustering
-
-*/
-if(blnEnable){
-  if (cluster.isMaster) {
-    log('Starting  ' + numCPUs + ' servers');
-
-      // make clusters
-      for (var i = 0; i < numCPUs; i++) {
-          cluster.fork();
-      }
-
-      // log the message on new prosess
-      cluster.on('online', function(worker) {
-        log('Worker ' + worker.process.pid + ' is online');
-      });
-
-      // start a new fork if it dies
-      cluster.on('exit', function(worker, code, signal) {
-        log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
-        log('Starting a new worker');
-        cluster.fork();
-      });
-
-  } else {
-      startserver();
-  }
-}else{
-  startserver();
-}
-
-/*
-
 The server part
-
 */
-function startserver(){
-  http.createServer(function(req, res) {
+function startServer() {
+  http
+    .createServer((req, res) => {
       res.writeHead(200);
-      res.end('process ' + process.pid + ' says hello!');
-  }).listen(8000);
+      res.end(`process ${process.pid} says hello!`);
+    })
+    .listen(8000);
 }
 
-// loging
-function log(message){
-  if(blnLog){
+// logging
+function log(message) {
+  if (blnLog) {
     console.log(message);
   }
+}
+
+/*
+Clustering
+*/
+if (blnEnable) {
+  if (cluster.isMaster) {
+    log(`Starting  ${numCPUs} servers`);
+
+    // make clusters
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < numCPUs; i++) {
+      cluster.fork();
+    }
+
+    // log the message on new prosess
+    cluster.on('online', (worker) => {
+      log(`Worker ${worker.process.pid} is online`);
+    });
+
+    // start a new fork if it dies
+    cluster.on('exit', (worker, code, signal) => {
+      log(`Worker ${worker.process.pid} died with code: ${code}, and signal: ${signal}`);
+      log('Starting a new worker');
+      cluster.fork();
+    });
+  } else {
+    startServer();
+  }
+} else {
+  startServer();
 }
